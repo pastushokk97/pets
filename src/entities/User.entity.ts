@@ -1,13 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'users',
 })
-export class UserEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', {
     name: 'user_id',
   })
-  public userId: string;
+  public userId!: string;
 
   @Column({
     type: 'varchar',
@@ -31,7 +31,7 @@ export class UserEntity {
     name: 'email',
     nullable: false,
   })
-  public email: string;
+  public email!: string;
 
   @Column({
     type: 'varchar',
@@ -47,19 +47,20 @@ export class UserEntity {
     name: 'password',
     nullable: false,
   })
-  public password: string;
+  public password!: string;
 
   @Column({
     type: 'date',
     name: 'created_date',
     nullable: false,
+    default: new Date(),
   })
-  public createdDate: Date;
+  public createdDate!: Date;
 
   @Column({
     type: 'date',
     name: 'updated_date',
     nullable: true,
   })
-  public updatedDate: Date;
+  public updatedDate?: Date;
 }

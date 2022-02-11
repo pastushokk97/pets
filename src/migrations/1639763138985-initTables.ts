@@ -10,8 +10,8 @@ export class initTables1639763138985 implements MigrationInterface {
         email varchar(96) NOT NULL,
         phone varchar(11),
         password varchar(255) NOT NULL,
-        created_date timestamp NOT NULL DEFAULT CURRENT_DATE,
-        updated_date timestamp,
+        created_date date NOT NULL DEFAULT CURRENT_DATE,
+        updated_date date,
         PRIMARY KEY(user_id)
       );`);
     await queryRunner.query(`CREATE TABLE announcement(
@@ -24,8 +24,8 @@ export class initTables1639763138985 implements MigrationInterface {
         photos jsonb,
         price int,
         currency varchar(1),
-        created_date timestamp NOT NULL DEFAULT CURRENT_DATE,
-        updated_date timestamp,
+        created_date date NOT NULL DEFAULT CURRENT_DATE,
+        updated_date date,
         PRIMARY KEY(announcement_id),
         CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id)
       );`);

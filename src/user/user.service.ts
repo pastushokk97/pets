@@ -13,11 +13,13 @@ import { AuthService } from '../auth/auth.service';
 import { IUserLogin } from './interfaces/userLogin.interface';
 import { IAuthLogin } from '../auth/interfaces/authLogin.interface';
 import { IUserService } from './interfaces/userService.interface';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService implements IUserService {
   constructor(
     private readonly authService: AuthService,
+    @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -26,20 +28,30 @@ export class UserService implements IUserService {
   }
 
   async signUp(user: Partial<UserEntity>): Promise<UserEntity> {
-    const isRegistered = await this.userRepository.findOne({
-      email: user.email,
-    });
+    try {
+      const isRegistered = await this.userRepository.findOne({
+        email: user.email,
+      });
 
-    if (isRegistered) {
-      throw new ConflictException(USER_ERROR.userExist);
+      if (isRegistered) {
+        throw new ConflictException(USER_ERROR.userExist);
+      }
+
+      const hash = UserService.hashPassword(user.password);
+
+      const test = this.userRepository.create({ ...user, password: hash });
+
+      const userTest = await this.userRepository.save(
+        this.userRepository.create({
+          ...user,
+          password: hash,
+          // createdDate: new Date(),
+        }),
+      );
+      return userTest;
+    } catch (e) {
+      console.log(e);
     }
-
-    const hash = UserService.hashPassword(user.password);
-
-    return this.userRepository.save({
-      ...user,
-      password: hash,
-    });
   }
 
   async login(user: IUserLogin): Promise<UserEntity & IAuthLogin> {
@@ -57,7 +69,7 @@ export class UserService implements IUserService {
 
     const token = await this.authService.login(userInDB);
 
-    return { ...userInDB, ...token };
+    return { ...userInDB, ...token } as any;
   }
 
   async getInfo(userId: string, email: string): Promise<UserEntity> {
