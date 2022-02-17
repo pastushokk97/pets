@@ -51,6 +51,6 @@ export class UserController {
   public async signUp(@Body() body: UserSignUpDTO, @Res() res: Response) {
     const user = await this.userService.signUp(body);
 
-    return res.json(user).status(HttpStatus.CREATED);
+    return res.json(user).status(HttpStatus.OK);
   }
 }
