@@ -17,12 +17,9 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: docker-compose up
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: docker-compose up -d
+      - name: Test
+        run: docker run --network container:pet_project appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/
