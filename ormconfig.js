@@ -1,6 +1,6 @@
 module.exports = {
   type: 'postgres',
-  host: '127.0.0.1',
+  host: 'postgres',
   port: 5432,
   username: 'postgres',
   password: 'password',
@@ -11,7 +11,7 @@ module.exports = {
   entities: ['dist/**/*.entity{.js,.ts}'],
   migrations: ['dist/migrations/*.js'],
   cli: {
-    entitiesDir: './**/entities',
+    entitiesDir: './src/entities',
     migrationsDir: './src/migrations',
   },
 };

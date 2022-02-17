@@ -14,14 +14,17 @@ import { IUserLogin } from './interfaces/userLogin.interface';
 import { IAuthLogin } from '../auth/interfaces/authLogin.interface';
 import { IUserService } from './interfaces/userService.interface';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 
 @Injectable()
 export class UserService implements IUserService {
+  private readonly userRepository: UserRepository;
   constructor(
     private readonly authService: AuthService,
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
-  ) {}
+    private readonly connection: Connection,
+  ) {
+    this.userRepository = this.connection.getCustomRepository(UserRepository);
+  }
 
   static hashPassword(password: string): string {
     return crypto.createHash('md5').update(password).digest('hex');

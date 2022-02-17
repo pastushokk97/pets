@@ -4,12 +4,14 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install
+RUN npm ci
 
 EXPOSE 8080
 
 RUN npm run build
 
+#RUN npm run migration:run
+
 VOLUME /usr/src/app
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "test"]

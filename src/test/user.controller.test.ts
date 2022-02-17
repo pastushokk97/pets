@@ -6,17 +6,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/User.repository';
 import { UserModule } from '../user/user.module';
 
+let app: INestApplication;
+let userRepository: UserRepository;
 describe('UserController', () => {
-  let app: INestApplication;
-  let userRepository: UserRepository;
-
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
         UserModule,
         TypeOrmModule.forRoot({
           type: 'postgres',
-          host: '127.0.0.1',
+          host: 'postgres',
           port: 5432,
           username: 'postgres',
           password: 'password',
