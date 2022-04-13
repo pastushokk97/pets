@@ -27,7 +27,8 @@ export class AuthService {
         return true;
       }
       return false;
-    } catch (err) {
+      // TODO: описать ошибку
+    } catch (err: any) {
       throw new HttpException(err.message, HttpStatus.UNAUTHORIZED);
     }
   }

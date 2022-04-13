@@ -5,6 +5,7 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
+import { Connection } from 'typeorm';
 
 import { USER_ERROR } from '../app-constants/error-text';
 import { UserEntity } from '../entities/User.entity';
@@ -13,12 +14,11 @@ import { AuthService } from '../auth/auth.service';
 import { IUserLogin } from './interfaces/userLogin.interface';
 import { IAuthLogin } from '../auth/interfaces/authLogin.interface';
 import { IUserService } from './interfaces/userService.interface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
 
 @Injectable()
 export class UserService implements IUserService {
   private readonly userRepository: UserRepository;
+
   constructor(
     private readonly authService: AuthService,
     private readonly connection: Connection,
@@ -41,8 +41,6 @@ export class UserService implements IUserService {
       }
 
       const hash = UserService.hashPassword(user.password);
-
-      const test = this.userRepository.create({ ...user, password: hash });
 
       const userTest = await this.userRepository.save(
         this.userRepository.create({
