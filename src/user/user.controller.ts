@@ -14,7 +14,7 @@ import { Response, Request } from 'express';
 import { isEmpty } from 'lodash';
 
 import { UserService } from './user.service';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../middlewares/auth/auth.guard';
 import { UserSignUpDTO } from './dto/userSignUp.dto';
 import { UserLoginDTO } from './dto/userLogin.dto';
 

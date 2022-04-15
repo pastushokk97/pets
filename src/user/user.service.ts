@@ -10,9 +10,8 @@ import { Connection } from 'typeorm';
 import { USER_ERROR } from '../app-constants/error-text';
 import { UserEntity } from '../entities/User.entity';
 import { UserRepository } from '../repositories/User.repository';
-import { AuthService } from '../auth/auth.service';
-import { IUserLogin } from './interfaces/userLogin.interface';
-import { IAuthLogin } from '../auth/interfaces/authLogin.interface';
+import { AuthService } from '../middlewares/auth/auth.service';
+import { IUserLogin, UserLogin } from './interfaces/userLogin.interface';
 import { IUserService } from './interfaces/userService.interface';
 
 @Injectable()
@@ -42,20 +41,19 @@ export class UserService implements IUserService {
 
       const hash = UserService.hashPassword(user.password);
 
-      const userTest = await this.userRepository.save(
+      return await this.userRepository.save(
         this.userRepository.create({
           ...user,
           password: hash,
-          // createdDate: new Date(),
+          createdDate: new Date(),
         }),
       );
-      return userTest;
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      throw err;
     }
   }
 
-  async login(user: IUserLogin): Promise<UserEntity & IAuthLogin> {
+  async login(user: IUserLogin): Promise<UserLogin> {
     const userInDB = await this.userRepository.findOneByEmail(user.email);
 
     if (!userInDB) {
@@ -68,9 +66,9 @@ export class UserService implements IUserService {
       throw new ForbiddenException(USER_ERROR.incorrectPassword);
     }
 
-    const token = await this.authService.login(userInDB);
+    const token = await this.authService.login(userInDB.userId);
 
-    return { ...userInDB, ...token } as any;
+    return { user: userInDB, token };
   }
 
   async getInfo(userId: string, email: string): Promise<UserEntity> {
@@ -80,10 +78,10 @@ export class UserService implements IUserService {
     }
 
     const userByEmail = await this.userRepository.findOneByEmail(email);
-    if (userByEmail) {
-      return userByEmail;
+    if (!userByEmail) {
+      throw new NotFoundException(USER_ERROR.userNotFound);
     }
 
-    throw new NotFoundException(USER_ERROR.userNotFound);
+    return userByEmail;
   }
 }

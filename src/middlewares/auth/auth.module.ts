@@ -3,8 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthService } from './auth.service';
-import { UserRepository } from '../repositories/User.repository';
-import { expiresIn, JwtSecret } from '../app-constants/auth';
+import { UserRepository } from '../../repositories/User.repository';
+import { expiresIn, JwtSecret } from '../../app-constants/auth';
 
 @Module({
   imports: [

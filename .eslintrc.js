@@ -15,13 +15,14 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'src/migrations'],
+  ignorePatterns: ['.eslintrc.js', 'src/migrations', 'scripts'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/space-before-blocks': 'off',
     '@typescript-eslint/dot-notation': 'off',
+    '@typescript-eslint/no-var-requires': 'off'
   },
 };

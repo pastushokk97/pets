@@ -16,7 +16,8 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test": "typeorm migration:run --config ormconfig && jest --testTimeout=60000",
+    "test": "typeorm migration:run --config ormconfig & jest --testTimeout=60000",
+    "create-ormconfig": "node scripts/generate-ormconfig.js",
     "migration:create": "typeorm migration:create --config ormconfig -n",
     "migration:run": "typeorm migration:run --config ormconfig"
   },
@@ -28,6 +29,7 @@
     "@nestjs/typeorm": "^8.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "commander": "^9.1.0",
     "express": "^4.17.3",
     "lodash": "^4.17.21",
     "pg": "^8.7.1",
@@ -75,7 +77,7 @@
     "collectCoverageFrom": [
       "**/*.ts"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
 }

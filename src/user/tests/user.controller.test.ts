@@ -3,43 +3,33 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserRepository } from '../repositories/User.repository';
-import { UserModule } from '../user/user.module';
+import { UserRepository } from '../../repositories/User.repository';
+import { UserModule } from '../user.module';
+
+const options = require('../../../ormconfig.json');
 
 let app: INestApplication;
 let userRepository: UserRepository;
+
 describe('UserController', () => {
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
         UserModule,
-        TypeOrmModule.forRoot({
-          type: 'postgres',
-          host: 'postgres',
-          port: 5432,
-          username: 'postgres',
-          password: 'password',
-          database: 'pets_service',
-          entities: ['./**/*.entity.ts'],
-          synchronize: false,
-        }),
+        TypeOrmModule.forRoot({ ...options, autoLoadEntities: true }),
       ],
     }).compile();
 
     app = module.createNestApplication();
     userRepository = module.get(UserRepository);
     await app.init();
-  }, 60000);
-  beforeEach((): void => {
-    jest.setTimeout(60000);
-  });
-  afterEach(async () => {
-    await userRepository.query('DELETE FROM users;');
   });
 
   afterAll(async () => {
+    await userRepository.query('DELETE FROM users;');
     await app.close();
   });
+
   describe('signUp()', () => {
     describe('SUCCESS CASES', () => {
       it('should sign up user', async () => {
@@ -58,7 +48,7 @@ describe('UserController', () => {
 
         expect(status).toStrictEqual(201);
         // expect(body.email).toStrictEqual(userDB.email);
-      }, 60000);
+      });
     });
   });
 });
