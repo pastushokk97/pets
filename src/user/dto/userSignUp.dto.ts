@@ -23,7 +23,7 @@ export class UserSignUpDTO {
 
   @IsString()
   @IsOptional()
-  @MaxLength(11)
+  @MaxLength(14)
   public phone?: string;
 
   @IsString()
