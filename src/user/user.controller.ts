@@ -17,8 +17,9 @@ import { UserService } from './user.service';
 import { AuthGuard } from '../middlewares/auth/auth.guard';
 import { UserSignUpDTO } from './dto/userSignUp.dto';
 import { UserLoginDTO } from './dto/userLogin.dto';
+import { USER_API } from '../app-constants/routes';
 
-@Controller('user')
+@Controller(USER_API)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -51,6 +52,6 @@ export class UserController {
   public async signUp(@Body() body: UserSignUpDTO, @Res() res: Response) {
     const user = await this.userService.signUp(body);
 
-    return res.json(user).status(HttpStatus.OK);
+    return res.json(user).status(HttpStatus.CREATED);
   }
 }
