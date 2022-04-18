@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"src/test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "start:prod": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -54,6 +54,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^7.0.4",
     "jest": "^27.0.6",
     "prettier": "^2.3.2",
     "supertest": "^6.1.3",

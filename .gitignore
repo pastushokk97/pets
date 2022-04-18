@@ -36,6 +36,7 @@ lerna-debug.log*
 
 #GitHub
 .github
+.husky
 
 #config
 ormconfig.json
