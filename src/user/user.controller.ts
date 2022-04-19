@@ -38,20 +38,20 @@ export class UserController {
     const { userId, email } = query;
     const user = await this.userService.getInfo(userId, email);
 
-    return res.json(user).status(HttpStatus.OK);
+    return res.status(HttpStatus.OK).json(user);
   }
 
   @Post('login')
   public async login(@Body() body: UserLoginDTO, @Res() res: Response) {
     const validateUser = await this.userService.login(body);
 
-    return res.json(validateUser).status(HttpStatus.OK);
+    return res.status(HttpStatus.OK).json(validateUser);
   }
 
   @Post('sign-up')
   public async signUp(@Body() body: UserSignUpDTO, @Res() res: Response) {
     const user = await this.userService.signUp(body);
 
-    return res.json(user).status(HttpStatus.CREATED);
+    return res.status(HttpStatus.CREATED).json(user);
   }
 }
