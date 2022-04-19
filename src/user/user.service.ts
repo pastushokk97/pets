@@ -71,7 +71,7 @@ export class UserService implements IUserService {
     return { user: userInDB, token };
   }
 
-  async getInfo(userId: string, email: string): Promise<UserEntity> {
+  async getInfo(userId?: string, email?: string): Promise<UserEntity> {
     const userById = await this.userRepository.findOneById(userId);
     if (userById) {
       return userById;

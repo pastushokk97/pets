@@ -13,9 +13,10 @@ export class AuthService {
   ) {}
 
   async validateUser(req: Request): Promise<boolean> {
-    // TODO: find token
     try {
-      const token = req.rawHeaders[1].replace('Bearer ', '');
+      const token = req.rawHeaders
+        .find((item) => item.includes('Bearer'))
+        .replace('Bearer ', '');
       const { userId } = await this.jwtService.verify(token);
 
       const user = await this.userRepository.findOne({
