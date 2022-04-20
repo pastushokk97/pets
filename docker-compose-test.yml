@@ -4,6 +4,7 @@ services:
   app:
     build: .
     container_name: pet_project
+    command: bash -c "sleep 30 && npm run create-ormconfig -- -h postgres -u postgres -p password -d pets_service && npm run migration:run && npm run test"
     ports:
       - "8080:3000"
     depends_on:
