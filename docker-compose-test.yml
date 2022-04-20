@@ -1,0 +1,36 @@
+version: "3"
+## src on 14
+services:
+  app:
+    build: .
+    container_name: pet_project
+    command: bash -c "sleep 30 && npm run create-ormconfig -- -h postgres -u postgres -p password -d pets_service && npm run migration:run && npm run test"
+    ports:
+      - "8080:3000"
+    depends_on:
+      - postgres
+    networks:
+      - shared_bridge
+    volumes:
+      - "./:/src"
+  postgres:
+    image: postgres
+    container_name: pg_pet_project
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pets_service
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+    networks:
+      - shared_bridge
+    volumes:
+      - "pg-data:/var/lib/postgresql/data"
+volumes:
+  pg-data:
+    driver: local
+  app-data:
+    driver: local
+networks:
+  shared_bridge:
+    driver: bridge

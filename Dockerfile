@@ -6,14 +6,12 @@ COPY . .
 
 RUN npm ci
 
-EXPOSE 8080
-
 RUN npm run build
 
 RUN npm run create-ormconfig -- -h postgres -u postgres -p password -d pets_service
 
-#RUN npm run migration:run
+EXPOSE 8080
 
 VOLUME /usr/src/app
 
-CMD ["npm", "run", "test"]
+CMD ["npm", "run", "start"]
