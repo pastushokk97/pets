@@ -4,9 +4,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm run build
-
 RUN npm ci
+
+RUN npm run build
 
 EXPOSE 8080
 
