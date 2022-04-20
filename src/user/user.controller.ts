@@ -10,7 +10,7 @@ import {
   Query,
   BadRequestException,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { isEmpty } from 'lodash';
 
 import { UserService } from './user.service';
@@ -18,6 +18,8 @@ import { AuthGuard } from '../middlewares/auth/auth.guard';
 import { UserSignUpDTO } from './dto/userSignUp.dto';
 import { UserLoginDTO } from './dto/userLogin.dto';
 import { USER_API } from '../app-constants/routes';
+import { IAuthenticateReq } from '../app-constants/types';
+import { UserInfoDto } from './dto/userInfo.dto';
 
 @Controller(USER_API)
 export class UserController {
@@ -26,15 +28,13 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('/info')
   public async getInfo(
-    // TODO: ???
-    @Query() query: any,
-    @Req() req: Request,
+    @Query() query: UserInfoDto,
+    @Req() req: IAuthenticateReq,
     @Res() res: Response,
   ) {
     if (isEmpty(query)) {
       throw new BadRequestException();
     }
-
     const { userId, email } = query;
     const user = await this.userService.getInfo(userId, email);
 
