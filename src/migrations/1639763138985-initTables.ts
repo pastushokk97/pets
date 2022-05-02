@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class initTables1639763138985 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
-    await queryRunner.query(`CREATE TABLE users(
+    await queryRunner.query(`CREATE TABLE "user"(
         user_id uuid DEFAULT uuid_generate_v4(),
         firstname varchar(255),
         lastname varchar(255),
@@ -14,9 +14,9 @@ export class initTables1639763138985 implements MigrationInterface {
         updated_date date,
         PRIMARY KEY(user_id)
       );`);
-    await queryRunner.query(`CREATE TABLE announcement(
+    await queryRunner.query(`CREATE TABLE "announcement"(
         announcement_id uuid DEFAULT uuid_generate_v4(),
-        user_id uuid REFERENCES users(user_id) ON DELETE CASCADE NOT NULL,
+        user_id uuid REFERENCES "user"(user_id) ON DELETE CASCADE NOT NULL,
         title varchar(255) NOT NULL,
         description text NOT NULL,
         region varchar(255) NOT NULL,
@@ -27,11 +27,13 @@ export class initTables1639763138985 implements MigrationInterface {
         created_date date NOT NULL DEFAULT CURRENT_DATE,
         updated_date date,
         PRIMARY KEY(announcement_id),
-        CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id)
+        CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES "user"(user_id)
       );`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP EXTENSION IF EXIST "uuid-ossp";`);
+    await queryRunner.query("DROP TABLE IF EXISTS user")
+    await queryRunner.query("DROP TABLE IF EXISTS announcement")
   }
 }

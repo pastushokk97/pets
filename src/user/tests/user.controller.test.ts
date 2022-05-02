@@ -20,6 +20,7 @@ import { UserService } from '../user.service';
 import { AuthModule } from '../../middlewares/auth/auth.module';
 import { AuthService } from '../../middlewares/auth/auth.service';
 import { IAuthLogin } from '../../middlewares/auth/interfaces/authLogin.interface';
+import { AnnouncementRepository } from '../../repositories/Announcement.repository';
 
 const options = require('../../../ormconfig.json');
 
@@ -34,6 +35,7 @@ describe('UserController', () => {
         UserModule,
         AuthModule,
         TypeOrmModule.forRoot({ ...options, autoLoadEntities: true }),
+        TypeOrmModule.forFeature([AnnouncementRepository]),
       ],
     }).compile();
 

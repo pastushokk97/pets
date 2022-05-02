@@ -1,8 +1,15 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity({
-  name: 'users',
-})
+import { USER_ENTITY } from '../app-constants/entities';
+import { AnnouncementEntity } from './Announcement.entity';
+
+@Entity(USER_ENTITY)
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', {
     name: 'user_id',
@@ -63,4 +70,7 @@ export class UserEntity extends BaseEntity {
     nullable: true,
   })
   public updatedDate?: Date;
+
+  @OneToMany(() => AnnouncementEntity, (announcement) => announcement.user)
+  public announcements?: AnnouncementEntity[];
 }
