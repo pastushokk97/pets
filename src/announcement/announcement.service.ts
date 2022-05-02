@@ -9,7 +9,7 @@ import { IAnnouncementService } from './interfaces/announcement.interface';
 import { ANNOUNCEMENT_ERROR } from '../app-constants/error-text';
 
 @Injectable()
-export class AnnouncementService implements IAnnouncementService{
+export class AnnouncementService implements IAnnouncementService {
   private readonly announcementRepository: AnnouncementRepository;
 
   private readonly userRepository: UserRepository;

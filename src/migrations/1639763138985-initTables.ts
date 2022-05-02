@@ -33,7 +33,7 @@ export class initTables1639763138985 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP EXTENSION IF EXIST "uuid-ossp";`);
-    await queryRunner.query("DROP TABLE IF EXISTS user")
-    await queryRunner.query("DROP TABLE IF EXISTS announcement")
+    await queryRunner.query('DROP TABLE IF EXISTS user');
+    await queryRunner.query('DROP TABLE IF EXISTS announcement');
   }
 }
