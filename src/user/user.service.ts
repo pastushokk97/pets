@@ -45,7 +45,6 @@ export class UserService implements IUserService {
         this.userRepository.create({
           ...user,
           password: hash,
-          createdDate: new Date(),
         }),
       );
     } catch (err) {

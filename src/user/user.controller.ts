@@ -18,7 +18,7 @@ import { AuthGuard } from '../middlewares/auth/auth.guard';
 import { UserSignUpDTO } from './dto/userSignUp.dto';
 import { UserLoginDTO } from './dto/userLogin.dto';
 import { USER_API } from '../app-constants/routes';
-import { IAuthenticateReq } from '../app-constants/types';
+import { IAuthenticateReq } from '../app-constants/interfaces';
 import { UserInfoDto } from './dto/userInfo.dto';
 
 @Controller(USER_API)

@@ -3,3 +3,7 @@ export const USER_ERROR = {
   userNotFound: 'User was not found',
   incorrectPassword: 'Passwords did not match',
 };
+
+export const ANNOUNCEMENT_ERROR = {
+  announcementExist: 'This announcement is already exists',
+};
