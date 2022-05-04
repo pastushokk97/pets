@@ -171,4 +171,39 @@ describe('AnnouncementController', () => {
       });
     });
   });
+  describe('deleteAnnouncement()', () => {
+    describe(SUCCESS_CASES, () => {
+      let testUser: UserEntity;
+      let token: IAuthLogin;
+      let userAnnouncements: AnnouncementEntity;
+      beforeAll(async () => {
+        testUser = await userRepository.save(user);
+        token = await authService.login(testUser.userId);
+        userAnnouncements = await announcementRepository.save({
+          ...announcement,
+          userId: testUser.userId,
+        });
+      });
+      afterAll(async () => {
+        await userRepository.remove(testUser);
+      });
+      it('should delete announcement', async () => {
+        const { status } = await request(app.getHttpServer())
+          .delete(`${ANNOUNCEMENT_API}/${userAnnouncements.announcementId}`)
+          .send(announcement)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token.access_token}`);
+
+        const announcementInDB = await announcementRepository.findOne({
+          where: {
+            userId: testUser.userId,
+            announcementId: userAnnouncements.announcementId,
+          },
+        });
+
+        expect(status).toStrictEqual(HttpStatus.OK);
+        expect(announcementInDB).toBeUndefined();
+      });
+    });
+  });
 });

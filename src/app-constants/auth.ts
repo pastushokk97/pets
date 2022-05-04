@@ -1,2 +1,2 @@
 export const JwtSecret = 'secretJWT';
-export const expiresIn = '10 min';
+export const expiresIn = '60 min';
