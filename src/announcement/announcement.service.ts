@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { Connection, DeleteResult } from 'typeorm';
 
 import { AnnouncementRepository } from '../repositories/Announcement.repository';
 import { UserRepository } from '../repositories/User.repository';
@@ -36,5 +36,12 @@ export class AnnouncementService implements IAnnouncementService {
     } catch (err) {
       throw err;
     }
+  }
+
+  deleteAnnouncement(
+    announcementId: string,
+    userId: string,
+  ): Promise<DeleteResult> {
+    return this.announcementRepository.delete({ announcementId, userId });
   }
 }

@@ -81,6 +81,7 @@ export class AnnouncementEntity extends BaseEntity {
     type: 'date',
     name: 'updated_date',
     nullable: true,
+    default: new Date(),
   })
   public updatedDate?: Date;
 

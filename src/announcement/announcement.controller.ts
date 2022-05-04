@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpStatus,
   Post,
   Req,
+  Param,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -32,5 +34,17 @@ export class AnnouncementController {
       body,
     );
     return res.status(HttpStatus.CREATED).json(announcement);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('/:announcementId')
+  public async deleteAnnouncement(
+    @Req() req: IAuthenticateReq,
+    @Param('announcementId') announcementId,
+    @Res() res: Response,
+  ) {
+    const { userId } = req.user;
+    await this.announcementService.deleteAnnouncement(announcementId, userId);
+    return res.status(HttpStatus.OK).json();
   }
 }
