@@ -165,26 +165,6 @@ describe('UserController', () => {
         expect(body.message).toStrictEqual(USER_ERROR.incorrectPassword);
       });
     });
-    describe(VALIDATION_ERROR_CASES, () => {
-      it('should return error if email is undefined', async () => {
-        const invalidUser = omit(user, 'email');
-        const { status } = await request(app.getHttpServer())
-          .post(`${USER_API}/login`)
-          .send(invalidUser)
-          .set('Accept', 'application/json');
-
-        expect(status).toStrictEqual(HttpStatus.BAD_REQUEST);
-      });
-      it('should return error if password is undefined', async () => {
-        const invalidUser = omit(user, 'password');
-        const { status } = await request(app.getHttpServer())
-          .post(`${USER_API}/login`)
-          .send(invalidUser)
-          .set('Accept', 'application/json');
-
-        expect(status).toStrictEqual(HttpStatus.BAD_REQUEST);
-      });
-    });
   });
   describe('getInfo()', () => {
     describe(SUCCESS_CASES, () => {
@@ -305,6 +285,87 @@ describe('UserController', () => {
           .set('Authorization', `Bearer ${token.access_token}`);
 
         expect(status).toStrictEqual(HttpStatus.FORBIDDEN);
+      });
+    });
+  });
+  describe('updateUser()', () => {
+    describe(SUCCESS_CASES, () => {
+      let testUser: UserEntity;
+      let token: IAuthLogin;
+      beforeEach(async () => {
+        testUser = await userRepository.save(user);
+        token = await authService.login(testUser.userId);
+      });
+      afterEach(async () => {
+        await userRepository.remove(testUser);
+      });
+      it("should update user's firstname", async () => {
+        const firstname = 'firstname';
+        const { status, body } = await request(app.getHttpServer())
+          .patch(`${USER_API}/update`)
+          .send({ firstname })
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token.access_token}`);
+
+        expect(status).toStrictEqual(HttpStatus.OK);
+        expect(body.userId).toStrictEqual(testUser.userId);
+        expect(body.firstname).toStrictEqual(firstname);
+      });
+      it("should update user's lastname", async () => {
+        const lastname = 'lastname';
+        const { status, body } = await request(app.getHttpServer())
+          .patch(`${USER_API}/update`)
+          .send({ lastname })
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token.access_token}`);
+
+        expect(status).toStrictEqual(HttpStatus.OK);
+        expect(body.userId).toStrictEqual(testUser.userId);
+        expect(body.lastname).toStrictEqual(lastname);
+      });
+      it("should update user's phone", async () => {
+        const phone = '+380666666666';
+        const { status, body } = await request(app.getHttpServer())
+          .patch(`${USER_API}/update`)
+          .send({ phone })
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token.access_token}`);
+
+        expect(status).toStrictEqual(HttpStatus.OK);
+        expect(body.userId).toStrictEqual(testUser.userId);
+        expect(body.phone).toStrictEqual(phone);
+      });
+    });
+  });
+  describe('updateUserPassword()', () => {
+    describe(SUCCESS_CASES, () => {
+      let testUser: UserEntity;
+      let token: IAuthLogin;
+      beforeEach(async () => {
+        testUser = await userRepository.save({
+          ...user,
+          password: UserService.hashPassword(user.password),
+        });
+        token = await authService.login(testUser.userId);
+      });
+      afterEach(async () => {
+        await userRepository.remove(testUser);
+      });
+      it("should update user's firstname", async () => {
+        const newPassword = 'newPassword';
+        const { status } = await request(app.getHttpServer())
+          .patch(`${USER_API}/update-password`)
+          .send({ password: testUser.password, newPassword })
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token.access_token}`);
+        const userInDB = await userRepository.findOne({
+          where: { userId: testUser.userId },
+        });
+
+        expect(status).toStrictEqual(HttpStatus.OK);
+        expect(userInDB.password).toStrictEqual(
+          UserService.hashPassword(newPassword),
+        );
       });
     });
   });
